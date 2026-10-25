@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Constellation browser regressions</title><body><pre id="result">Running…</pre>
+<script type="module">
+import {chartFolds} from '../chart.js';
+import {buildModelCsv} from '../data-export.js';
+import {zeroBoundaryEdges} from '../sbi-map.js';
+import {EARTH_KM,walkerPosition} from '../walker-geometry.js';
+const assert=(condition,message)=>{if(!condition)throw Error(message);};
+const cells=[
+  {targetIdx:0,vertices:[[0,0],[10,0],[10,10],[0,10]]},
+  {targetIdx:1,vertices:[[10,0],[20,0],[20,10],[10,10]]},
+];
+const shared=edge=>edge[0][0]===10&&edge[1][0]===10;
+try{
+  assert(JSON.stringify(chartFolds(83))==='[1,10,50,83,100]','selected curve is out of order');
+  assert(JSON.stringify(chartFolds(50))==='[1,10,50,100]','selected context curve is duplicated');
+  const csv=buildModelCsv({elevationDeg:10,serviceLatitudeDeg:40,altitudesKm:[550],folds:[1,2],results:{'550':{'1':{satelliteMinimum:{inclinationDeg:55,satellites:24,planes:3,perPlane:8,phase:1,minimum:2},planeTradeoff:null},'2':null}}});
+  const csvRows=csv.trim().split('\r\n');
+  assert(csvRows.length===5,'CSV must include both objectives for every altitude and fold');
+  assert(csvRows[1]==='40,10,550,1,fewest_satellites,1,55,24,3,8,1,2','CSV solution values are incorrect');
+  assert(csvRows[2]==='40,10,550,1,fewest_planes,0,,,,,,','CSV missing-design row is incorrect');
+  assert(zeroBoundaryEdges(cells,[0,1]).some(shared),'zero-to-covered boundary is missing');
+  assert(!zeroBoundaryEdges(cells,[0,0]).some(shared),'shared zero-cell edge was outlined');
+  assert(zeroBoundaryEdges(cells,[1,1]).length===0,'positive cells have a zero outline');
+  const sites=new Float32Array([0,1,0,1,0,0,0,-1,0]);
+  const latitudes=new Float32Array([Math.PI/2,0,-Math.PI/2]);
+  const worker=new Worker('../coverage-worker.js',{type:'module'});
+  const workerCounts=new Promise((resolve,reject)=>{worker.onmessage=e=>resolve(new Uint16Array(e.data.counts));worker.onerror=reject;});
+  worker.postMessage({type:'init',sites:sites.buffer,latitudes:latitudes.buffer});
+  worker.postMessage({type:'count',id:1,alt:550,inc:55,design:{planes:2,perPlane:4,phase:1},time:0});
+  const actual=await workerCounts;worker.terminate();
+  const e=10*Math.PI/180,psi=Math.acos(EARTH_KM*Math.cos(e)/(EARTH_KM+550))-e,threshold=Math.cos(psi),expected=new Uint16Array(3),vectors=[[0,1,0],[1,0,0],[0,-1,0]];
+  for(let p=0;p<2;p++)for(let k=0;k<4;k++){const position=walkerPosition(2,4,1,550,p,k,0,55),rad=1+550/EARTH_KM;for(let j=0;j<3;j++)if(position.reduce((sum,value,a)=>sum+value*vectors[j][a],0)/rad>=threshold)expected[j]++;}
+  assert(JSON.stringify([...actual])===JSON.stringify([...expected]),'worker counts disagree with direct visibility calculation');
+  document.getElementById('result').textContent='PASS: chart ordering, CSV data, zero-region topology, and worker visibility counts';
+}catch(error){document.getElementById('result').textContent='FAIL: '+error.message;throw error;}
+</script></body></html>

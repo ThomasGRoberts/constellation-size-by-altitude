@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Higher Orbits, Fewer Satellites · ESPL</title><link rel="stylesheet" href="style.css?v=20261025-control-help"></head>
+<body>
+  <div id="canvas-wrap" aria-label="Interactive Walker delta constellation"><canvas id="map2dCanvas" aria-label="Mollweide map of simultaneous satellite visibility"></canvas></div>
+  <aside id="ui" aria-label="Model controls"><div class="panelFace panelFront">
+    <h1>Higher Orbits, Fewer Satellites</h1>
+    <p class="introText">Set service needs, then explore designs by altitude.</p>
+    <section class="panelSection" aria-labelledby="requirementsHeading">
+      <div id="requirementsHeading" class="subsectionLabel controlGroupLabel">Service requirements</div>
+      <div class="controlHeading"><label for="fold">Required coverage</label><output id="foldValue">83-fold</output></div>
+      <p id="foldHelp" class="controlHelp">Minimum satellites above 10° at each sampled site.</p>
+      <input id="fold" type="range" min="1" max="100" value="83" aria-describedby="foldHelp foldRange"><div id="foldRange" class="rangeEnds coverageRangeEnds"><span>1 satellite</span><span>100 satellites</span></div>
+      <div class="controlHeading"><label for="serviceLatitude">Required latitude band</label><output id="serviceLatitudeValue">±40°</output></div>
+      <p id="serviceLatitudeHelp" class="controlHelp">Equal limits north and south of the equator.</p>
+      <input id="serviceLatitude" type="range" min="0" max="12" step="1" value="2" aria-describedby="serviceLatitudeHelp serviceLatitudeRange"><div id="serviceLatitudeRange" class="rangeEnds"><span>±30°</span><span>±90°</span></div>
+    </section>
+    <hr>
+    <section class="panelSection" aria-labelledby="altitudeHeading">
+      <div id="altitudeHeading" class="subsectionLabel controlGroupLabel">Explore altitude</div>
+      <div class="controlHeading"><label for="altitude">Satellite altitude</label><output id="altitudeValue">550 km</output></div>
+      <p id="altitudeHelp" class="controlHelp">Orbit height above Earth's surface.</p>
+      <input id="altitude" type="range" min="0" max="33" value="4" aria-describedby="altitudeHelp altitudeRange"><div id="altitudeRange" class="rangeEnds"><span>350 km</span><span>2,000 km</span></div>
+    </section>
+    <hr>
+    <section class="panelSection"><div class="subsectionLabel">Optimization objective</div><div class="viewSwitch" role="group" aria-label="Optimization objective"><button id="minSat" class="viewSwitchOption activeViewSwitch" aria-pressed="true">Fewest satellites</button><button id="minPlane" class="viewSwitchOption" aria-pressed="false">Fewest planes</button></div></section>
+    <hr>
+    <section class="panelSection"><p class="statIntro">The selected Walker constellation requires:</p>
+      <div class="statsGridWithIn"><div class="statBlock"><div id="satellites" class="statNumber">—</div><div class="statLabel">Satellites</div></div><div class="statIn">in</div><div class="statBlock"><div id="planes" class="statNumber">—</div><div class="statLabel">Orbital planes</div></div></div>
+      <p id="selectedInclination" class="selectedInclination">Optimized inclination: —</p>
+      <p id="recalcStatus" role="status" aria-live="polite"></p>
+    </section>
+    <hr>
+    <section class="panelSection"><div class="chartHeading"><h2 id="chartTitle">Satellites by altitude</h2><button id="downloadData" class="chartExport" title="Download all validated results for this service region as CSV" aria-label="Download model data as CSV" disabled>Download CSV ↓</button></div><canvas id="scalingChart" role="img" aria-label="Several n-fold altitude-scaling curves"></canvas><div id="chartLegend" class="chartLegend"></div></section>
+    <hr>
+    <section class="panelSection"><div id="modeControls"><div class="viewSwitch" role="group" aria-label="Visualization mode"><button id="view3d" class="viewSwitchOption activeViewSwitch" aria-pressed="true">3D Globe</button><button id="view2d" class="viewSwitchOption" aria-pressed="false">2D Map</button></div></div><div class="playbackRow"><button id="playBtn" class="miniControl playPauseMini" aria-label="Pause animation" title="Play or pause"><span class="pauseIcon"></span></button><input id="timelineSlider" type="range" min="0" max="24" step="0.01" value="0" aria-label="Simulation time in hours"><span id="timelineTime">00:00</span><button id="speedDownBtn" class="miniControl speedMini" aria-label="Slow down" title="Slow down"><span class="doubleTriangle doubleTriangleLeft"></span></button><button id="speedUpBtn" class="miniControl speedMini" aria-label="Speed up" title="Speed up"><span class="doubleTriangle doubleTriangleRight"></span></button></div></section>
+    <hr>
+    <details id="methods"><summary>Methods &amp; limits</summary>
+      <p>N-fold coverage means at least n satellites are simultaneously above 10° elevation at each sampled ground site. The service latitude control sets the region from its southern to northern bound; the search compares inclinations from 30° to 90° and selects the lowest-cost Walker design among its candidates. Sites are tested every 5° latitude and 15° longitude, every two hours over one day. These sampled results do not guarantee continuous coverage. The 2D map shows counts across the whole Earth; dashed lines mark the selected service region.</p>
+      <p>The minimum elevation angle is fixed at <strong>10°</strong>. Choosing the fewest planes may use up to 25% more satellites than choosing the fewest satellites.</p>
+      <a href="METHODOLOGY.md" target="_blank" rel="noopener">Full method, sources, and limitations ↗</a>
+    </details>
+  </div></aside>
+  <div id="loadIndicator" hidden role="status" aria-live="polite"><span class="loadingMark" aria-hidden="true"></span><span id="loadMessage">Loading validated design…</span><progress id="loadProgress" max="34" value="0" hidden></progress></div>
+  <div id="cameraControls"><button id="zoomInBtn" class="cameraBtn" title="Zoom in" aria-label="Zoom in">+</button><button id="zoomOutBtn" class="cameraBtn" title="Zoom out" aria-label="Zoom out">−</button><button id="viewToggleBtn" class="cameraBtn" title="Toggle globe or horizon view" aria-label="Toggle globe or horizon view">◠</button></div>
+  <div id="legendContainer" class="legendContainer" style="display:none"><div id="legend2D" class="legend2D"><span class="noCoverageSwatch" aria-hidden="true"></span><div class="gradientLegendBar"></div><span class="noCoverageLabel">No coverage</span><div class="numericLegend"><span>1</span><span class="legendQuantity">Satellites above 10°</span><span id="coverageMaxLabel">—</span></div></div></div>
+  <a id="gtLogo" href="https://espl.ae.gatech.edu/" target="_blank" rel="noopener" aria-label="Engineering Space Policy Laboratory home"><img src="assets-ESPL.png" alt=""></a>
+  <script src="./vendor/d3/d3.v7.min.js"></script><script src="./vendor/d3/d3-geo-projection.v4.min.js"></script>
+  <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js","three/addons/":"./vendor/three/addons/","topojson-client":"./vendor/topojson-client.js"}}</script><script type="module" src="app.js?v=20261025-service-4"></script>
+</body></html>

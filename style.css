@@ -1,0 +1,51 @@
+/* The primary component styles are copied byte-for-byte from SBI. */
+@import url('./vendor/sbi/style.css');
+
+#ui{height:min(810px,calc(100vh - 90px));max-height:calc(100vh - 90px)}
+#ui hr{margin:3px 0}
+#ui .introText{margin-bottom:7px}
+#modeControls{margin:2px 0 6px}
+#modeControls .viewSwitch{width:100%}
+.controlHeading{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.controlHeading output{color:#444;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+#ui .controlHeading label{margin:5px 0 2px}
+.controlHelp{margin:0 0 1px;color:#666;font-size:10px;line-height:1.25}
+#ui input[type=range]{margin-top:1px}
+.rangeEnds{display:flex;justify-content:space-between;color:#888;font-size:10px;margin:2px 0 4px}
+.coverageRangeEnds{gap:8px;align-items:start}
+.coverageRangeEnds span:last-child{white-space:nowrap;text-align:right}
+#ui .subsectionLabel{margin:0 0 6px}
+#ui .controlGroupLabel{margin-bottom:3px;color:#806200}
+.statsGridWithIn .statLabel{font-size:11px}
+.selectedInclination{margin:6px 0 0;color:#555;font-size:11px;text-align:center}
+.statIntro{margin-bottom:8px}
+#recalcStatus{font-size:11px;color:#765b00;line-height:1.25;margin:6px 0 0;min-height:0}
+#recalcStatus:empty{display:none}
+.chartHeading{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:3px}
+.chartHeading h2{font-size:13px;color:#444;margin:0;font-weight:700}
+.chartExport{font:600 10px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#735800;background:transparent;border:0;padding:2px;cursor:pointer}
+.chartExport:disabled{color:#aaa;cursor:default}
+#scalingChart{display:block;width:100%;height:125px;background:transparent}
+.chartLegend{display:flex;flex-wrap:nowrap;justify-content:space-between;gap:3px;min-height:16px;margin-top:5px;white-space:nowrap}
+.chartLegend span{display:inline-flex;align-items:center;gap:4px;color:#777;font-size:9px}
+.chartLegend i{display:inline-block;width:10px;height:2px;background:#aaa}
+.chartLegend .selected{color:#6c5100;font-weight:700}
+#methods{color:#666;font-size:11px;line-height:1.42}
+#methods summary{cursor:pointer;color:#555;font-size:12px;font-weight:700}
+#methods p{margin:9px 0}
+#methods a{color:#806200;text-underline-offset:2px}
+.legendContainer{left:18px;bottom:20px;width:325px;max-width:calc(100vw - 36px);min-height:0;display:block}
+.legend2D{display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:12px;row-gap:3px;align-items:center}
+.legend2D .noCoverageSwatch{display:block;width:100%;box-sizing:border-box}
+.noCoverageLabel{color:#555;font-size:10px;white-space:nowrap}
+.gradientLegendBar{background:linear-gradient(to right,#fffdf1 0%,#fff4b8 18%,#ffe066 40%,#eaaa00 66%,#b87900 100%)}
+.numericLegend{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;color:#555;font-size:10px;margin:0}
+.numericLegend span:last-child{text-align:right}
+.legendQuantity{font-size:10px;font-weight:400;white-space:nowrap;text-align:center}
+#loadIndicator{position:fixed;z-index:19;left:calc(50% + 170px);top:28px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;max-width:calc(100vw - 380px);padding:9px 12px;border:1px solid #ddd;background:rgba(255,255,255,.94);box-shadow:0 2px 12px #0002;color:#555;font-size:11px}
+#loadIndicator[hidden],#loadProgress[hidden]{display:none}
+#loadProgress{width:60px;height:6px}
+.loadingMark{width:10px;height:10px;flex:0 0 auto;border:2px solid #ddd;border-top-color:#a77c08;border-radius:50%;animation:loadingTurn .7s linear infinite}
+@keyframes loadingTurn{to{transform:rotate(360deg)}}
+@media(max-width:600px){#ui{left:10px;top:10px;width:min(325px,calc(100vw - 20px));height:min(805px,calc(100vh - 90px));max-height:calc(100vh - 90px)}#cameraControls{top:10px;right:10px}#gtLogo{width:190px;right:10px;bottom:44px}.legendContainer{left:10px;bottom:8px;width:min(325px,calc(100vw - 20px));max-width:calc(100vw - 20px)}#loadIndicator{left:50%;top:auto;bottom:106px;max-width:calc(100vw - 30px)}}
+@media(prefers-reduced-motion:reduce){.loadingMark{animation:none}}

@@ -1,0 +1,15 @@
+:root {
+  --espl-white: #ffffff;
+  --espl-earth: #f7f7f7;
+  --espl-ink: #252525;
+  --espl-text: #444444;
+  --espl-muted: #777777;
+  --espl-line: #dddddd;
+  --espl-gold: #eaaa00;
+  --espl-gold-ink: #a87400;
+  --espl-navy: #003057;
+  --espl-panel: rgba(255, 255, 255, .94);
+  --espl-shadow: 0 12px 35px rgba(0, 0, 0, .10);
+  --espl-radius: 16px;
+  --espl-font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}

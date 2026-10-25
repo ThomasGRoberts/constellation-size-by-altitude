@@ -1,0 +1,432 @@
+{
+  "baseline": {
+    "source": "CelesTrak GP and SATCAT Starlink JSON",
+    "archive": "20261023T182356Z",
+    "analysisStartUtc": "2026-10-23T18:00:00+00:00",
+    "durationHours": 24.0,
+    "timeStepHours": 1.0,
+    "minimumElevationDeg": 10,
+    "latitudeStepDeg": 10,
+    "longitudeStepDeg": 30,
+    "statuses": [
+      "+"
+    ],
+    "satellites": 10810,
+    "excluded": {
+      "status": 306
+    },
+    "propagationErrors": {
+      "0": 270250
+    },
+    "locations": 204,
+    "regionLocations": 108,
+    "bands": {
+      "service_40": {
+        "minimum": 83,
+        "p10": 110.0,
+        "p25": 122.0,
+        "median": 153.0,
+        "p75": 192.0,
+        "p90": 216.0,
+        "maximum": 268
+      },
+      "equatorial_20": {
+        "minimum": 83,
+        "p10": 105.0,
+        "p25": 113.0,
+        "median": 125.0,
+        "p75": 140.25,
+        "p90": 157.0,
+        "maximum": 185
+      },
+      "mid_20_40": {
+        "minimum": 143,
+        "p10": 161.0,
+        "p25": 172.0,
+        "median": 197.0,
+        "p75": 213.0,
+        "p90": 232.0,
+        "maximum": 268
+      },
+      "outside_40": {
+        "minimum": 44,
+        "p10": 65.0,
+        "p25": 76.0,
+        "median": 94.0,
+        "p75": 158.0,
+        "p90": 192.0,
+        "maximum": 245
+      }
+    },
+    "regionTimeMinima": [
+      91,
+      95,
+      94,
+      97,
+      96,
+      98,
+      86,
+      96,
+      99,
+      101,
+      99,
+      88,
+      96,
+      94,
+      100,
+      101,
+      83,
+      96,
+      91,
+      98,
+      91,
+      103,
+      100,
+      91,
+      91
+    ],
+    "serviceLocationsUnder24": 0
+  },
+  "sensitivity": {
+    "elevation25": {
+      "source": "CelesTrak GP and SATCAT Starlink JSON",
+      "archive": "20261023T182356Z",
+      "analysisStartUtc": "2026-10-23T18:00:00+00:00",
+      "durationHours": 24.0,
+      "timeStepHours": 1.0,
+      "minimumElevationDeg": 25,
+      "latitudeStepDeg": 10,
+      "longitudeStepDeg": 30,
+      "statuses": [
+        "+"
+      ],
+      "satellites": 10810,
+      "excluded": {
+        "status": 306
+      },
+      "propagationErrors": {
+        "0": 270250
+      },
+      "locations": 204,
+      "regionLocations": 108,
+      "bands": {
+        "service_40": {
+          "minimum": 21,
+          "p10": 32.0,
+          "p25": 37.0,
+          "median": 45.0,
+          "p75": 58.0,
+          "p90": 72.0,
+          "maximum": 94
+        },
+        "equatorial_20": {
+          "minimum": 21,
+          "p10": 30.0,
+          "p25": 33.0,
+          "median": 38.0,
+          "p75": 43.0,
+          "p90": 48.0,
+          "maximum": 60
+        },
+        "mid_20_40": {
+          "minimum": 27,
+          "p10": 43.0,
+          "p25": 48.0,
+          "median": 61.0,
+          "p75": 71.0,
+          "p90": 78.0,
+          "maximum": 94
+        },
+        "outside_40": {
+          "minimum": 6,
+          "p10": 13.0,
+          "p25": 19.0,
+          "median": 28.0,
+          "p75": 43.0,
+          "p90": 63.0,
+          "maximum": 83
+        }
+      },
+      "regionTimeMinima": [
+        27,
+        22,
+        22,
+        27,
+        28,
+        26,
+        23,
+        27,
+        24,
+        25,
+        21,
+        26,
+        23,
+        23,
+        28,
+        27,
+        23,
+        26,
+        25,
+        28,
+        26,
+        29,
+        23,
+        23,
+        22
+      ],
+      "serviceLocationsUnder24": 11
+    },
+    "fineGeography": {
+      "source": "CelesTrak GP and SATCAT Starlink JSON",
+      "archive": "20261023T182356Z",
+      "analysisStartUtc": "2026-10-23T18:00:00+00:00",
+      "durationHours": 24.0,
+      "timeStepHours": 1.0,
+      "minimumElevationDeg": 10,
+      "latitudeStepDeg": 5,
+      "longitudeStepDeg": 15,
+      "statuses": [
+        "+"
+      ],
+      "satellites": 10810,
+      "excluded": {
+        "status": 306
+      },
+      "propagationErrors": {
+        "0": 270250
+      },
+      "locations": 792,
+      "regionLocations": 408,
+      "bands": {
+        "service_40": {
+          "minimum": 83,
+          "p10": 109.0,
+          "p25": 121.0,
+          "median": 147.0,
+          "p75": 182.0,
+          "p90": 209.0,
+          "maximum": 268
+        },
+        "equatorial_20": {
+          "minimum": 83,
+          "p10": 105.0,
+          "p25": 112.0,
+          "median": 123.0,
+          "p75": 140.0,
+          "p90": 155.0,
+          "maximum": 185
+        },
+        "mid_20_40": {
+          "minimum": 105,
+          "p10": 141.0,
+          "p25": 162.0,
+          "median": 185.0,
+          "p75": 205.0,
+          "p90": 222.0,
+          "maximum": 268
+        },
+        "outside_40": {
+          "minimum": 39,
+          "p10": 65.0,
+          "p25": 77.0,
+          "median": 99.0,
+          "p75": 172.0,
+          "p90": 210.0,
+          "maximum": 269
+        }
+      },
+      "regionTimeMinima": [
+        91,
+        89,
+        91,
+        96,
+        96,
+        92,
+        86,
+        89,
+        94,
+        88,
+        96,
+        88,
+        96,
+        90,
+        96,
+        95,
+        83,
+        87,
+        91,
+        96,
+        91,
+        96,
+        98,
+        90,
+        89
+      ],
+      "serviceLocationsUnder24": 0
+    },
+    "twoHourTimeStep": {
+      "source": "CelesTrak GP and SATCAT Starlink JSON",
+      "archive": "20261023T182356Z",
+      "analysisStartUtc": "2026-10-23T18:00:00+00:00",
+      "durationHours": 24.0,
+      "timeStepHours": 2.0,
+      "minimumElevationDeg": 10,
+      "latitudeStepDeg": 10,
+      "longitudeStepDeg": 30,
+      "statuses": [
+        "+"
+      ],
+      "satellites": 10810,
+      "excluded": {
+        "status": 306
+      },
+      "propagationErrors": {
+        "0": 140530
+      },
+      "locations": 204,
+      "regionLocations": 108,
+      "bands": {
+        "service_40": {
+          "minimum": 83,
+          "p10": 109.0,
+          "p25": 123.0,
+          "median": 153.0,
+          "p75": 191.0,
+          "p90": 215.0,
+          "maximum": 268
+        },
+        "equatorial_20": {
+          "minimum": 83,
+          "p10": 104.0,
+          "p25": 114.0,
+          "median": 125.0,
+          "p75": 137.0,
+          "p90": 156.0,
+          "maximum": 185
+        },
+        "mid_20_40": {
+          "minimum": 145,
+          "p10": 162.0,
+          "p25": 172.0,
+          "median": 197.0,
+          "p75": 213.0,
+          "p90": 229.0,
+          "maximum": 268
+        },
+        "outside_40": {
+          "minimum": 45,
+          "p10": 65.0,
+          "p25": 77.0,
+          "median": 94.0,
+          "p75": 158.0,
+          "p90": 192.0,
+          "maximum": 245
+        }
+      },
+      "regionTimeMinima": [
+        91,
+        94,
+        96,
+        86,
+        99,
+        99,
+        96,
+        100,
+        83,
+        91,
+        91,
+        100,
+        91
+      ],
+      "serviceLocationsUnder24": 0
+    },
+    "plusPartial": {
+      "source": "CelesTrak GP and SATCAT Starlink JSON",
+      "archive": "20261023T182356Z",
+      "analysisStartUtc": "2026-10-23T18:00:00+00:00",
+      "durationHours": 24.0,
+      "timeStepHours": 1.0,
+      "minimumElevationDeg": 10,
+      "latitudeStepDeg": 10,
+      "longitudeStepDeg": 30,
+      "statuses": [
+        "+",
+        "P"
+      ],
+      "satellites": 11116,
+      "excluded": {},
+      "propagationErrors": {
+        "0": 277898,
+        "1": 2
+      },
+      "locations": 204,
+      "regionLocations": 108,
+      "bands": {
+        "service_40": {
+          "minimum": 86,
+          "p10": 113.0,
+          "p25": 125.0,
+          "median": 156.0,
+          "p75": 196.25,
+          "p90": 220.0,
+          "maximum": 274
+        },
+        "equatorial_20": {
+          "minimum": 86,
+          "p10": 108.0,
+          "p25": 116.0,
+          "median": 127.0,
+          "p75": 143.0,
+          "p90": 159.0,
+          "maximum": 188
+        },
+        "mid_20_40": {
+          "minimum": 144,
+          "p10": 164.0,
+          "p25": 175.0,
+          "median": 202.0,
+          "p75": 218.0,
+          "p90": 237.0,
+          "maximum": 274
+        },
+        "outside_40": {
+          "minimum": 45,
+          "p10": 65.0,
+          "p25": 76.0,
+          "median": 96.0,
+          "p75": 161.25,
+          "p90": 198.0,
+          "maximum": 250
+        }
+      },
+      "regionTimeMinima": [
+        93,
+        96,
+        96,
+        100,
+        100,
+        101,
+        89,
+        99,
+        103,
+        101,
+        102,
+        92,
+        97,
+        95,
+        101,
+        104,
+        86,
+        99,
+        95,
+        100,
+        94,
+        104,
+        100,
+        99,
+        94
+      ],
+      "serviceLocationsUnder24": 0
+    }
+  }
+}

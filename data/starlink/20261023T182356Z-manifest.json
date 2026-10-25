@@ -1,0 +1,20 @@
+{
+  "retrieved_utc": "20261023T182356Z",
+  "source": "CelesTrak",
+  "datasets": {
+    "gp": {
+      "url": "https://celestrak.org/NORAD/elements/gp.php?GROUP=STARLINK&FORMAT=JSON",
+      "file": "20261023T182356Z-gp.json",
+      "count": 11116,
+      "sha256": "fa79b8adf2beff7a919bbf55af78a5c4e33f6318cc0db0d596eec01562f4cf0b",
+      "http_date": "Fri, 23 Oct 2026 18:24:00 GMT"
+    },
+    "satcat": {
+      "url": "https://celestrak.org/satcat/records.php?GROUP=STARLINK&FORMAT=JSON",
+      "file": "20261023T182356Z-satcat.json",
+      "count": 11117,
+      "sha256": "6cdce771be47aeaaaa35f025d597ec5cdaea2751d00a468f923e883ae89c778c",
+      "http_date": "Fri, 23 Oct 2026 18:24:02 GMT"
+    }
+  }
+}

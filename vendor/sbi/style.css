@@ -1,0 +1,1299 @@
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root {
+  --scenario-selected-color: #b88b13;
+}
+
+#canvas-wrap {
+  position: fixed;
+  inset: 0;
+}
+
+#map2dCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background: #ffffff;
+  cursor: grab;
+}
+
+#map2dCanvas.dragging {
+  cursor: grabbing;
+}
+
+#ui {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 10;
+  width: 325px;
+  height: var(--panel-height, min(536px, calc(100vh - 100px)));
+  max-height: max(0px, calc(100vh - 100px));
+  box-sizing: border-box;
+  perspective: 1200px;
+  transition: transform .28s ease, width .62s cubic-bezier(.2,.72,.2,1), height .32s ease;
+}
+
+#ui.is-detail-open {
+  width: min(480px, calc(100vw - 70px));
+}
+
+.panelFlipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .62s cubic-bezier(.2,.72,.2,1);
+}
+
+#ui.is-detail-open .panelFlipper {
+  transform: rotateY(180deg);
+}
+
+.panelFace {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  background: rgba(255,255,255,.94);
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px rgba(0,0,0,.10);
+  backdrop-filter: blur(10px);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,.18) transparent;
+}
+
+.panelFront {
+  transform: rotateY(0deg);
+}
+
+.panelBack {
+  padding: 0;
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+
+#ui.is-detail-open .panelFront {
+  pointer-events: none;
+}
+
+#ui.is-detail-open .panelBack {
+  pointer-events: auto;
+}
+
+#panelToggleBtn {
+  position: absolute;
+  left: 100%;
+  top: 32px;
+  z-index: 25;
+  width: 16px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #999999;
+  cursor: pointer;
+  perspective: 200px;
+}
+
+.panelToggleInner {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform .62s cubic-bezier(.2,.72,.2,1);
+}
+
+#ui.is-detail-open .panelToggleInner {
+  transform: rotateY(180deg);
+}
+
+.panelToggleFace {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid #d8d8d8;
+  border-left: 0;
+  border-radius: 0 7px 7px 0;
+  background: rgba(255,255,255,.84);
+  font-size: 17px;
+  line-height: 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: background .15s ease, color .15s ease;
+}
+
+.panelToggleFaceBack {
+  transform: rotateY(180deg);
+}
+
+#panelToggleBtn:hover .panelToggleFace,
+#panelToggleBtn:focus-visible .panelToggleFace {
+  background: #f5f5f5;
+  color: #555555;
+}
+
+#panelToggleBtn:focus-visible {
+  outline: none;
+}
+
+body.uiCollapsed #ui {
+  transform: translateX(calc(-100% - 18px));
+}
+
+.panelFace::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panelFace::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panelFace::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,.16);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.12;
+  color: #444444;
+}
+
+.introText,
+.statIntro {
+  color: #666666;
+  line-height: 1.35;
+  font-size: 13px;
+}
+
+.introText {
+  margin: 0 0 15px 0;
+}
+
+.statIntro {
+  margin: 0 0 12px 0;
+}
+
+.panelSection {
+  margin: 0;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #555555;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.subsectionLabel {
+  display: block;
+  margin: 10px 0 6px 0;
+  color: #555555;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .055em;
+}
+
+.legendTitle {
+  margin-top: 12px;
+}
+
+input,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  padding: 9px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+}
+
+.twoColumnControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.twoColumnControls label {
+  white-space: nowrap;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,.10);
+  margin: 14px 0;
+}
+
+.statsGridWithIn {
+  display: grid;
+  grid-template-columns: 1fr 34px 1fr;
+  align-items: center;
+}
+
+.statBlock {
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 45px;
+  font-weight: 800;
+  line-height: 1;
+  color: #222222;
+}
+
+.statLabel {
+  margin-top: 4px;
+  color: #666666;
+  font-size: 13px;
+}
+
+.statIn {
+  align-self: center;
+  justify-self: center;
+  color: #777777;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: .01em;
+  margin-top: -10px;
+}
+
+#coverageChart {
+  width: 100%;
+  height: 142px;
+  display: block;
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+}
+
+.visualizationToggleRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.viewSwitch {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 22px;
+  padding: 2px;
+  border: 1px solid #d0d0d0;
+  border-radius: 999px;
+  background: #fafafa;
+  gap: 2px;
+}
+
+.viewSwitchOption {
+  min-width: 26px;
+  height: 18px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 10px;
+  line-height: 18px;
+  text-align: center;
+  color: #777777;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  flex: 1 1 auto;
+}
+
+.activeViewSwitch {
+  color: #222222;
+  background: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.playbackRow {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 35px 34px 34px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0;
+}
+
+.miniControl {
+  height: 26px;
+  border: 1px solid #d0d0d0;
+  border-radius: 999px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 10.5px;
+  color: #555555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.miniControl:hover {
+  background: #f5f5f5;
+}
+
+.playPauseMini {
+  width: 30px;
+  min-width: 30px;
+  padding: 0;
+}
+
+.speedMiniGroup { display: none; }
+#timelineTime { min-width: 35px; color: #666; font-variant-numeric: tabular-nums; font-size: 10.5px; text-align: right; }
+#ui .panelSection:last-of-type > hr { display: none; }
+.speedMini { width: 26px; padding: 0; font-size: 13px; line-height: 1; }
+#speedDownBtn { justify-self: end; }
+.doubleTriangle { display: inline-flex; gap: 1px; align-items: center; }
+.doubleTriangle::before, .doubleTriangle::after { content: ""; display: block; width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+.doubleTriangleLeft::before, .doubleTriangleLeft::after { border-right: 5px solid #555; }
+.doubleTriangleRight::before, .doubleTriangleRight::after { border-left: 5px solid #555; }
+
+.speedMini {
+  width: 34px;
+  padding: 0;
+}
+
+.pauseIcon {
+  width: 9px;
+  height: 12px;
+  display: inline-block;
+  background:
+    linear-gradient(#444 0 0) left / 3px 100% no-repeat,
+    linear-gradient(#444 0 0) right / 3px 100% no-repeat;
+}
+
+.playIcon {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid #444;
+  margin-left: 2px;
+}
+
+.activeSpeed {
+  border-color: #444444;
+  color: #222222;
+  background: #f3f3f3;
+  font-weight: 700;
+}
+
+input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 18px;
+  padding: 0;
+  margin-top: 0;
+  background: transparent;
+  border: 0;
+  min-width: 0;
+  --timeline-progress: 0%;
+}
+
+#timelineSlider { min-width: 0; width: 100%; }
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(to right, #d6a516 0%, #d6a516 var(--timeline-progress), #d8d8d8 var(--timeline-progress), #d8d8d8 100%);
+  border-radius: 999px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 3px;
+  height: 14px;
+  margin-top: -6px;
+  border-radius: 2px;
+  border: 0;
+  background: #111111;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: linear-gradient(to right, #d6a516 0%, #d6a516 var(--timeline-progress), #d8d8d8 var(--timeline-progress), #d8d8d8 100%);
+  border-radius: 999px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  border: 0;
+  background: #111111;
+  cursor: pointer;
+}
+
+.legendContainer {
+  position: fixed;
+  left: 18px;
+  bottom: 24px;
+  z-index: 20;
+  width: 250px;
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  transition: left .28s ease;
+}
+
+.legendList,
+.legend2D {
+  width: 100%;
+}
+
+.legendList {
+  display: grid;
+  gap: 7px;
+  margin-top: 0;
+  color: #666666;
+  font-size: 12px;
+  align-content: center;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+.legendDotActive {
+  background: #f7d503;
+  border: 1.5px solid #4a4a4a;
+}
+
+.legendDotInactive {
+  background: #d5d5d5;
+  border: 1.5px solid #777777;
+}
+
+.scenarioDetailHeader {
+  position: absolute;
+  top: 8px;
+  right: 11px;
+  z-index: 1;
+}
+
+.scenarioTopMatter {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  box-sizing: border-box;
+  padding: 12px 16px 18px;
+  background: #ffffff;
+  border-radius: 15px 15px 0 0;
+}
+
+.scenarioBody {
+  padding: 0 16px 16px;
+}
+
+#scenarioBackBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #888888;
+  font: 500 11px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+
+.scenarioBackArrow {
+  display: block;
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .18s ease;
+}
+
+#scenarioBackBtn:hover,
+#scenarioBackBtn:focus-visible {
+  color: #555555;
+  outline: none;
+}
+
+#scenarioBackBtn:hover .scenarioBackArrow,
+#scenarioBackBtn:focus-visible .scenarioBackArrow {
+  transform: translateX(-2px);
+}
+
+#scenarioBackBtn:focus-visible {
+  border-radius: 999px;
+  outline: 1.5px solid #9a7413;
+  outline-offset: 1px;
+}
+
+.scenarioSectionHeading,
+.scenarioMetaLabel {
+  color: #777777;
+  font-size: 10.5px;
+  font-weight: 750;
+  letter-spacing: .065em;
+  text-transform: uppercase;
+}
+
+.scenarioIdentity {
+  margin: 0;
+}
+
+.scenarioMetaLabel {
+  display: block;
+  margin: 0 34px 14px 0;
+  line-height: 1;
+}
+
+.scenarioNavigator {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  margin: 0;
+  padding: 0 0 10px;
+  border-bottom: 1px solid #dddddd;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scenarioNavigator::-webkit-scrollbar {
+  display: none;
+}
+
+.scenarioNavigator button {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #929292;
+  font: 650 11px/1.15 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  cursor: pointer;
+  transform-origin: left baseline;
+  transition: color .22s ease, font-size .32s cubic-bezier(.2,.72,.2,1), letter-spacing .32s ease;
+}
+
+.scenarioNavigator button::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  left: 0;
+  height: 2px;
+  border-radius: 99px;
+  background: #b88b13;
+  opacity: 0;
+  transform: scaleX(.35);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.scenarioNavigator button:hover,
+.scenarioNavigator button:focus-visible {
+  color: #444444;
+}
+
+.scenarioNavigator button.is-current {
+  color: #444444;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -.015em;
+}
+
+.scenarioNavigator button.is-current::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.scenarioNavigator button:disabled {
+  opacity: .45;
+  cursor: wait;
+}
+
+.scenarioDetailMessage {
+  margin: 14px 0;
+  padding: 11px;
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+  background: #fafafa;
+  color: #666666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.scenarioDetailMessage[hidden] {
+  display: none;
+}
+
+.scenarioDetailError {
+  border-color: #dfcfad;
+  background: #fffdf7;
+  color: #705825;
+}
+
+.scenarioDetailEmpty {
+  border-color: #dddddd;
+  background: #fafafa;
+  color: #666666;
+}
+
+.scenarioDetailContent {
+  display: grid;
+  gap: 26px;
+}
+
+.scenarioDetailContent[hidden] {
+  display: none;
+}
+
+.scenarioSectionHeading {
+  margin: 0 0 7px;
+}
+
+.scenarioDetailMap {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: inset 0 1px 7px rgba(0,0,0,.035);
+}
+
+.scenarioMapBoundaries path {
+  fill: #f6f6f6;
+  stroke: #d2d2d2;
+  stroke-width: .52;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.scenarioMapLocator {
+  fill: none;
+  stroke: #b68b19;
+  stroke-width: .85;
+  opacity: 0;
+}
+
+.scenarioMapLocator.is-selected {
+  animation: scenarioLocate 1.8s ease-out both;
+}
+
+@keyframes scenarioLocate {
+  0% { opacity: 0; stroke-dasharray: 0 13; }
+  30%, 60% { opacity: .8; stroke-dasharray: 13 0; }
+  100% { opacity: 0; stroke-dasharray: 13 0; }
+}
+
+.scenarioMapFrame {
+  position: relative;
+}
+
+.scenarioMapCoordinateLabel {
+  position: absolute;
+  bottom: 7px;
+  right: 10px;
+  color: #987f3e;
+  font-size: 9px;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  background: transparent;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scenarioMapLocator.is-selected { animation: none; opacity: .45; }
+}
+
+.scenarioMapBoundaries .scenarioMapFocusCountry {
+  fill: #ededed;
+  stroke: #5d5d5d;
+  stroke-width: .9;
+}
+
+.scenarioMapMarker {
+  cursor: pointer;
+  outline: none;
+}
+
+.scenarioMapMarkerCore {
+  fill: #d2b75f;
+  stroke: none;
+  opacity: .9;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity .15s ease;
+}
+
+.scenarioMapMarkerHitArea {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.scenarioMapMarker.is-selected .scenarioMapMarkerCore {
+  fill: var(--scenario-selected-color);
+  opacity: 1;
+}
+
+.scenarioMapMarkerPulse {
+  fill: none;
+  stroke: rgba(214,165,22,.72);
+  stroke-width: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.scenarioMapMarker:hover .scenarioMapMarkerCore,
+.scenarioMapMarker:focus .scenarioMapMarkerCore {
+  opacity: .72;
+}
+
+.scenarioMapMarker.is-selected .scenarioMapMarkerPulse {
+  animation: scenarioDetonatePulse 5.2s ease-out infinite;
+  animation-delay: -3.744s;
+}
+
+@keyframes scenarioDetonatePulse {
+  0%, 72%, 100% { opacity: 0; transform: scale(.45); }
+  78% { opacity: .8; }
+  91% { opacity: 0; transform: scale(1.7); }
+}
+
+.scenarioLocationCarousel {
+  position: relative;
+  margin-top: 7px;
+  overflow-anchor: none;
+}
+
+.scenarioLocationNavigation {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  align-items: center;
+  min-height: 29px;
+  margin-bottom: 7px;
+}
+
+.scenarioLocationArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #777777;
+  font: 400 22px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+  transition: color .15s ease, transform .15s ease;
+}
+
+.scenarioLocationArrow:hover,
+.scenarioLocationArrow:focus-visible {
+  color: #3f3f3f;
+  transform: scale(1.08);
+}
+
+.scenarioLocationArrow:disabled {
+  opacity: .3;
+  cursor: default;
+  transform: none;
+}
+
+.scenarioLocationDetail {
+  box-sizing: border-box;
+  height: auto;
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.scenarioLocationCaptionContent {
+  box-sizing: border-box;
+  padding: 7px 4px 3px 11px;
+  border-left: 3px solid rgba(184,139,19,.72);
+}
+
+.scenarioLocationMeasure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  min-height: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.scenarioLocationDetail h3 {
+  margin: 0;
+  color: #3f3f3f;
+  font-size: 11.5px;
+  font-weight: 750;
+  line-height: 1.52;
+}
+
+.scenarioLocationIndicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 10px;
+}
+
+.scenarioLocationIndicator {
+  width: 5px;
+  height: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(174,135,30,.30);
+  cursor: pointer;
+  transition: width .24s ease, background .2s ease, transform .15s ease;
+}
+
+.scenarioLocationIndicator:hover,
+.scenarioLocationIndicator:focus-visible {
+  background: rgba(174,135,30,.68);
+  transform: scale(1.12);
+}
+
+.scenarioLocationIndicator.is-current {
+  width: 18px;
+  background: var(--scenario-selected-color);
+}
+
+.scenarioLocationDescription,
+.scenarioNarrative {
+  color: #5f5f5f;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.scenarioLocationDescription p,
+.scenarioNarrative p {
+  margin: 7px 0 0;
+}
+
+.scenarioNarrative p:first-child,
+.scenarioLocationDescription p:first-child {
+  margin-top: 0;
+}
+
+.scenarioNarrativeSection {
+  padding: 0;
+  border: 0;
+}
+
+.scenarioMapSection {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.scenarioFootnote {
+  position: static;
+  display: inline;
+}
+
+.scenarioFootnoteRef {
+  display: inline;
+  margin: 0 1px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #806312;
+  font: inherit;
+  cursor: pointer;
+  vertical-align: baseline;
+  text-decoration: none;
+}
+
+.scenarioFootnoteRef sup {
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.scenarioFootnoteRef:focus-visible {
+  outline: 1.5px solid #9a7413;
+  outline-offset: 1px;
+}
+
+.scenarioFootnoteExpanded {
+  position: relative;
+  display: none;
+  margin: 7px 0 9px;
+  padding: 9px 28px 9px 10px;
+  border-left: 2px solid #b9952d;
+  background: #f7f7f7;
+  color: #4f4f4f;
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.scenarioFootnoteExpanded a {
+  color: #725510;
+  text-decoration-color: rgba(114,85,16,.45);
+  overflow-wrap: anywhere;
+}
+
+.scenarioFootnoteCitationBreak {
+  display: inline;
+}
+
+.scenarioFootnoteCitationSpacer {
+  display: block;
+  height: 9px;
+}
+
+.scenarioFootnote.is-open .scenarioFootnoteExpanded {
+  display: block;
+}
+
+.scenarioFootnoteCollapse {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #777777;
+  font: 400 16px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+}
+
+.scenarioFootnoteCollapse:hover,
+.scenarioFootnoteCollapse:focus-visible {
+  background: #e8e8e8;
+  color: #333333;
+}
+
+@media (max-width: 520px) {
+  #ui,
+  #ui.is-detail-open {
+    width: calc(100vw - 70px);
+  }
+}
+
+@media (max-width: 700px) {
+  .legendContainer { left: 18px; bottom: 18px; }
+}
+
+.legend2D {
+  display: none;
+  margin-top: 0;
+}
+
+.gradientLegendRow {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.noCoverageSwatch {
+  height: 10px;
+  border-radius: 2px;
+  background: #eeeeee;
+  border: 1.5px solid #4a4a4a;
+}
+
+.gradientLegendBar {
+  height: 10px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      #fffdf1 0%,
+      #fff4b8 18%,
+      #ffe066 40%,
+      #eaaa00 66%,
+      #b87900 100%
+    );
+  border: 1px solid #dddddd;
+}
+
+.gradientLegendLabels {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 12px;
+  margin-top: 5px;
+  color: #666666;
+  font-size: 10.5px;
+  line-height: 1.2;
+}
+
+.gradientLegendLabels > span:first-child {
+  white-space: nowrap;
+}
+
+#coverageRangeLabel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.coverageRangeMin {
+  text-align: left;
+  justify-self: start;
+}
+
+.coverageRangeText {
+  text-align: center;
+  justify-self: center;
+}
+
+.coverageRangeMax {
+  text-align: right;
+  justify-self: end;
+}
+
+#cameraControls {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#projectLink {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #444444;
+  text-decoration: none;
+  z-index: 1;
+}
+
+.projectLinkIcon {
+  position: relative;
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+}
+
+#projectFlourishCanvas {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 58px;
+  height: 58px;
+  display: block;
+  pointer-events: none;
+  opacity: .9;
+  transition: opacity .24s ease;
+}
+
+#projectLink.is-open #projectFlourishCanvas {
+  opacity: 1;
+}
+
+.projectLinkLabel {
+  position: absolute;
+  top: 0;
+  right: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  padding-right: 10px;
+  opacity: 0;
+  clip-path: inset(0 0 0 100%);
+  color: #666666;
+  font-size: 12px;
+  font-weight: 400;
+  transition: clip-path .5s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
+}
+
+#projectLink.is-open .projectLinkLabel {
+  opacity: 1;
+  clip-path: inset(0);
+}
+
+.projectLinkArrow {
+  display: block;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  margin-left: 6px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .18s ease;
+}
+
+#projectLink.is-open .projectLinkArrow {
+  transform: translateX(-2px);
+}
+
+#projectLink:focus-visible {
+  outline: 2px solid rgba(180, 145, 35, .9);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelFlipper,
+  .panelToggleInner,
+  #ui { transition: none; }
+  .scenarioMapMarker.is-selected .scenarioMapMarkerPulse { animation: none; }
+  .scenarioBackArrow,
+  .projectLinkLabel,
+  #projectFlourishCanvas,
+  .projectLinkArrow { transition: none; }
+  #projectLink.is-open .projectLinkArrow { transform: none; }
+}
+
+.cameraBtn {
+  width: 46px;
+  height: 46px;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.95);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  transition: all .15s ease;
+  color: #444444;
+}
+
+.cameraBtn:hover {
+  background: #f5f5f5;
+}
+
+#gtLogo {
+  position: fixed;
+  right: 26px;
+  bottom: 24px;
+  width: 320px;
+  opacity: .23;
+  filter: grayscale(1);
+  z-index: 9;
+  display: block;
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+#gtLogo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#gtLogo::after {
+  content: "";
+  position: absolute;
+  inset: -35% -45%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 36%,
+    rgba(255,255,255,0.18) 43%,
+    rgba(255,255,255,0.98) 49%,
+    rgba(255,255,255,0.28) 56%,
+    transparent 64%
+  );
+  transform: translateX(-125%);
+}
+
+#gtLogo:hover::after,
+#gtLogo:focus-visible::after {
+  animation: esplLogoGlint 1.25s ease-out forwards;
+}
+
+#gtLogo:focus-visible {
+  outline: 2px solid rgba(180, 145, 35, .9);
+  outline-offset: 4px;
+}
+
+@keyframes esplLogoGlint {
+  to { transform: translateX(125%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gtLogo:hover::after,
+  #gtLogo:focus-visible::after {
+    animation: none;
+  }
+}
+
+#status {
+  display: none;
+}
