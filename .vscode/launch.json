@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "editor-browser",
+      "request": "launch",
+      "name": "Preview Higher Orbits, Fewer Satellites",
+      "preLaunchTask": "Start local constellation preview",
+      "url": "http://127.0.0.1:8765/?view=3d"
+    }
+  ]
+}

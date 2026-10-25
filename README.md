@@ -14,7 +14,7 @@ It serves `http://127.0.0.1:8765/`. Python 3 and NumPy are required. The browser
 
 The regional precomputation evaluates 34 altitudes across 13 symmetric service regions (±30° through ±90° in 5° steps) and tests orbital inclinations from 30° through 90° at each altitude. The browser displays complete stored grids rather than approximating between slider values. An unsupported URL value is rejected with a panel message.
 
-In the ESPL VS Code workspace, the **Run and Debug** selector has a clickable **Preview Higher Orbits, Fewer Satellites** launch configuration. It opens the running site in VS Code's integrated browser.
+When this project is opened as a VS Code folder, the **Run and Debug** selector has a clickable **Preview Higher Orbits, Fewer Satellites** launch configuration. It starts the local server if needed and opens the 3D globe in VS Code's integrated browser. The ESPL workspace also has a preview configuration.
 
 To regenerate the regional grids and their SHA-256 manifest, run `OPENBLAS_NUM_THREADS=1 python3 precompute_service.py`. The earlier fixed-40°/fixed-inclination grids remain archived in `data/grids/`. Numerical and grid-integrity tests: `OPENBLAS_NUM_THREADS=1 python3 -m unittest discover -s tests -v`.
 
